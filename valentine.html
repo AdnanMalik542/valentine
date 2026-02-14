@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hriditia 💖 Valentine</title>
+
+  <style>
+    :root{
+      --pink1:#ffc0cb;
+      --pink2:#ff9eb5;
+      --pink3:#ff6f91;
+      --card:#ffffffd9;
+      --accent:#ff4d6d;
+      --accent2:#ff85a1;
+      --text:#2b2b2b;
+      --shadow: 0 18px 45px rgba(0,0,0,.18);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: "Trebuchet MS", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      overflow:hidden;
+      background: linear-gradient(135deg,var(--pink1),var(--pink2),var(--pink3));
+    }
+
+    /* floating hearts */
+    .heart{
+      position:absolute;
+      color:rgba(255,255,255,.85);
+      font-size:18px;
+      animation: floatUp linear infinite;
+      pointer-events:none;
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,.12));
+    }
+    @keyframes floatUp{
+      from{ transform:translateY(110vh) translateX(0) scale(.9); opacity:.7; }
+      to{ transform:translateY(-15vh) translateX(20px) scale(1.15); opacity:.9; }
+    }
+
+    .card{
+      width:min(980px, 92vw);
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+      padding:22px;
+      position:relative;
+      overflow:visible;
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .title{
+      font-size: clamp(22px, 3vw, 34px);
+      color:var(--accent);
+      margin:0;
+      letter-spacing:-.02em;
+    }
+    .subtitle{
+      margin:6px 0 0;
+      color:rgba(0,0,0,.65);
+      font-size: 14px;
+      font-weight:700;
+    }
+
+    .pill{
+      background: rgba(255,77,109,.12);
+      color: var(--accent);
+      border: 1px solid rgba(255,77,109,.25);
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      margin-top:16px;
+    }
+    @media (max-width: 860px){
+      body{ overflow:auto; padding:16px; }
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius:20px;
+      padding:16px;
+    }
+
+    .question{
+      margin:10px 0 12px;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .buttons{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:10px;
+      position:relative;
+    }
+    button{
+      border:none;
+      padding:12px 18px;
+      border-radius:16px;
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease, left .14s ease, top .14s ease;
+      box-shadow: 0 14px 28px rgba(0,0,0,.12);
+    }
+    button:active{ transform: translateY(1px) scale(.99); }
+    .yes{ background: linear-gradient(135deg, #ff4d6d, #ffb3c1); color:white; }
+    .no{
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
+      color:#111827;
+    }
+
+    .success{
+      display:none;
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,77,109,.25);
+      background: rgba(255,77,109,.10);
+      color: var(--accent);
+      font-weight:900;
+    }
+
+    /* Funny counter + toast */
+    .funnyRow{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .attempts{
+      font-weight:900;
+      color: rgba(0,0,0,.65);
+      font-size:13px;
+    }
+    .toast{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(17,24,39,.92);
+      color: #fff;
+      font-weight:800;
+      font-size:13px;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    /* Photos */
+    .photos{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media (max-width: 520px){
+      .photos{ grid-template-columns: 1fr; }
+    }
+    .photoBox{
+      background: rgba(255,255,255,.9);
+      border: 2px dashed rgba(255,77,109,.35);
+      border-radius:18px;
+      padding:12px;
+      text-align:center;
+      position:relative;
+    }
+    .photoBox h3{
+      margin:0 0 10px;
+      font-size:14px;
+      color: rgba(0,0,0,.65);
+      font-weight:900;
+    }
+    .preview{
+      width:100%;
+      aspect-ratio: 4 / 3;
+      border-radius:16px;
+      overflow:hidden;
+      background: rgba(255,77,109,.06);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border: 1px solid rgba(0,0,0,.05);
+      position:relative;
+    }
+    .preview img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:none;
+    }
+    .placeholder{
+      padding:10px;
+      color: rgba(0,0,0,.55);
+      font-weight:800;
+      font-size:13px;
+    }
+
+    /* Cute file input */
+    .fileRow{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .fileInput{ display:none; }
+    .chooseBtn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
+      font-weight:900;
+      cursor:pointer;
+      border: 1px solid rgba(255,255,255,.35);
+      box-shadow: 0 10px 20px rgba(0,0,0,.10);
+      user-select:none;
+      font-size:13px;
+    }
+    .chooseBtn:active{ transform: translateY(1px); }
+    .fileName{
+      font-size:12px;
+      font-weight:800;
+      color: rgba(0,0,0,.65);
+      max-width: 220px;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .miniBtn{
+      padding:10px 12px;
+      font-size:13px;
+      border-radius:14px;
+      box-shadow:none;
+      border:1px solid rgba(0,0,0,.07);
+      background:white;
+      cursor:pointer;
+      font-weight:900;
+      color: rgba(0,0,0,.7);
+    }
+
+    /* Plans */
+    .planForm{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 520px){
+      .row{ grid-template-columns: 1fr; }
+    }
+    input[type="text"], input[type="time"]{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.10);
+      outline:none;
+      font-weight:800;
+      background: rgba(255,255,255,.9);
+    }
+    textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.10);
+      outline:none;
+      font-weight:800;
+      background: rgba(255,255,255,.9);
+      resize:none;
+      min-height:70px;
+    }
+
+    .planList{
+      margin-top:12px;
+      display:grid;
+      gap:10px;
+    }
+    .planItem{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.07);
+      background: rgba(255,255,255,.85);
+    }
+    .planLeft{ display:grid; gap:4px; }
+    .planPlace{ font-weight:950; color:#111827; }
+    .planMeta{ font-size:13px; color: rgba(0,0,0,.65); font-weight:900; }
+    .planNote{ font-size:13px; color: rgba(0,0,0,.6); font-weight:800; }
+    .del{
+      background: rgba(255,77,109,.12);
+      border:1px solid rgba(255,77,109,.22);
+      color: var(--accent);
+      border-radius:12px;
+      padding:8px 10px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:none;
+    }
+
+    .small{
+      font-size:12px;
+      color: rgba(0,0,0,.55);
+      font-weight:800;
+      margin-top:8px;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    // floating hearts
+    const totalHearts = 28;
+    for(let i=0;i<totalHearts;i++){
+      const h=document.createElement("div");
+      h.className="heart";
+      h.textContent = "❤";
+      h.style.left = Math.random()*100 + "vw";
+      h.style.fontSize = (14 + Math.random()*18) + "px";
+      h.style.animationDuration = (6 + Math.random()*8) + "s";
+      h.style.animationDelay = (Math.random()*4) + "s";
+      document.body.appendChild(h);
+    }
+  </script>
+
+  <div class="card" id="card">
+    <div class="top">
+      <div>
+        <h1 class="title">Hriditia 💖</h1>
+        <p class="subtitle">I made something cute just for you…</p>
+      </div>
+      <div class="pill">TAO • New York • 11:30 PM ✨</div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="panel">
+        <div class="question">Will you be my Valentine? 💕</div>
+
+        <div class="buttons">
+          <button class="yes" id="yesBtn">Yes 💗</button>
+          <button class="no" id="noBtn" type="button">No 🙈</button>
+        </div>
+
+        <div class="funnyRow">
+          <div class="attempts" id="attemptsText">No attempts: 0 😇</div>
+          <div class="attempts" id="hintText">Tip: try clicking “No” 😏</div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+
+        <div class="success" id="successMsg">
+          YAYYY!! 💕✨ See you at TAO in New York at 11:30 PM 🥰
+        </div>
+
+        <div class="photos">
+          <!-- Photo 1 -->
+          <div class="photoBox">
+            <h3>Our Photo #1 📸</h3>
+            <div class="preview">
+              <img id="img1" alt="Photo 1 preview" />
+              <div class="placeholder" id="ph1">Upload a cute photo of us 💞</div>
+            </div>
+            <div class="fileRow">
+              <input class="fileInput" type="file" id="file1" accept="image/*">
+              <label class="chooseBtn" for="file1">🌸 Choose Photo</label>
+              <span class="fileName" id="name1">No file chosen</span>
+              <button class="miniBtn" id="clear1" type="button">Clear</button>
+            </div>
+          </div>
+
+          <!-- Photo 2 -->
+          <div class="photoBox">
+            <h3>Our Photo #2 🌷</h3>
+            <div class="preview">
+              <img id="img2" alt="Photo 2 preview" />
+              <div class="placeholder" id="ph2">Add another favorite moment ✨</div>
+            </div>
+            <div class="fileRow">
+              <input class="fileInput" type="file" id="file2" accept="image/*">
+              <label class="chooseBtn" for="file2">💖 Choose Photo</label>
+              <span class="fileName" id="name2">No file chosen</span>
+              <button class="miniBtn" id="clear2" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="small">
+          Photos are saved only on this device/browser (not uploaded anywhere).
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="panel">
+        <div style="font-weight:950; font-size:18px; color:#111827;">Our Plan 💞</div>
+        <div class="small">Already set… but you can add more cute details!</div>
+
+        <div class="planForm">
+          <div class="row">
+            <input type="text" id="place" placeholder="Place (e.g., TAO)" />
+            <input type="time" id="time" />
+          </div>
+          <textarea id="note" placeholder="Little note (optional) 🌸"></textarea>
+
+          <div class="buttons" style="margin-top:0;">
+            <button class="yes" id="addPlanBtn" type="button">Add Plan ✨</button>
+            <button class="no" id="clearPlansBtn" type="button">Clear All</button>
+          </div>
+        </div>
+
+        <div class="planList" id="planList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Elements ----------
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn  = document.getElementById("noBtn");
+    const successMsg = document.getElementById("successMsg");
+    const toast = document.getElementById("toast");
+    const attemptsText = document.getElementById("attemptsText");
+    const hintText = document.getElementById("hintText");
+
+    const placeEl = document.getElementById("place");
+    const timeEl  = document.getElementById("time");
+    const noteEl  = document.getElementById("note");
+    
+
+    // ---------- Prefill inputs ----------
+    if (!placeEl.value) placeEl.value = "TAO (New York)";
+    if (!timeEl.value)  timeEl.value  = "23:30"; // 11:30 PM
+    if (!noteEl.value)  noteEl.value  = "Dress cute… I have a little surprise 💖";
+
+    // ---------- YES ----------
+    yesBtn.addEventListener("click", () => {
+      successMsg.style.display = "block";
+      yesBtn.textContent = "Yesss 💍💗";
+      showToast("Okayyy princess 💖 see you at TAO 😚");
+    });
+
+    // ---------- FUNNY MODE: No dodges ONLY when she tries to click ----------
+    let noAttempts = 0;
+
+    const funnyLines = [
+      "Nice try 😏",
+      "Not today 😌",
+      "Nope nope nope 🏃‍♀️💨",
+      "Your mouse is too slow 😭",
+      "Hriditiaaaa pleaseee 🥺💖",
+      "Error 404: ‘No’ not found 😅",
+      "You meant YES 😌💗",
+      "Are you sure? …I’m not 😭",
+      "Plot twist: it’s a YES button now 😏",
+      "Okay okay… stop bullying ‘No’ 😂"
+    ];
+
+    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+    function skipNoButton(){
+      const padding = 16;
+
+      // fixed: relative to viewport
+      noBtn.style.position = "fixed";
+
+      const rect = noBtn.getBoundingClientRect();
+      const btnW = rect.width;
+      const btnH = rect.height;
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      const minX = padding;
+      const minY = padding;
+      const maxX = Math.max(minX, vw - btnW - padding);
+      const maxY = Math.max(minY, vh - btnH - padding);
+
+      // pick a far-ish random spot
+      const currentX = rect.left;
+      const currentY = rect.top;
+
+      let x = currentX, y = currentY;
+
+      for(let tries = 0; tries < 14; tries++){
+        const rx = minX + Math.random() * Math.max(0, (maxX - minX));
+        const ry = minY + Math.random() * Math.max(0, (maxY - minY));
+        const dist = Math.hypot(rx - currentX, ry - currentY);
+        if(dist > 130 || tries === 13){
+          x = rx; y = ry;
+          break;
+        }
+      }
+
+      noBtn.style.left = clamp(x, minX, maxX) + "px";
+      noBtn.style.top  = clamp(y, minY, maxY) + "px";
+      noBtn.style.zIndex = "9999";
+
+    }
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.style.display = "block";
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.style.display = "none", 1600);
+    }
+
+    // THIS is the key:
+    // move right BEFORE click happens (mousedown), so it never gets clicked.
+    noBtn.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      noAttempts++;
+      attemptsText.textContent = `No attempts: ${noAttempts} 😇`;
+
+      const line = funnyLines[Math.min(noAttempts - 1, funnyLines.length - 1)];
+      showToast(line);
+
+      // After a few attempts, get extra playful
+      if(noAttempts === 3) hintText.textContent = "It’s okay… just press YES 😌💗";
+      if(noAttempts === 6) hintText.textContent = "At this point… we both know the answer 😭💖";
+      if(noAttempts === 9) hintText.textContent = "Fine… I’ll stop running (I won’t) 😏";
+
+      // On attempt 7, shrink a little (still visible)
+      if(noAttempts >= 7 && noAttempts <= 10){
+        const scale = Math.max(0.75, 1 - (noAttempts - 6) * 0.07);
+        noBtn.style.transform = `scale(${scale})`;
+      }
+
+      // On attempt 10, rename it as a joke (still a "No" button)
+      if(noAttempts === 10){
+        noBtn.textContent = "Still No 🙈 (why?)";
+      }
+
+      skipNoButton();
+
+      // On attempt 12, it temporarily turns into "Yes" for fun… then back
+      if(noAttempts === 12){
+        const old = noBtn.textContent;
+        noBtn.textContent = "YES 😳";
+        showToast("WAIT… that wasn’t supposed to happen 😭");
+        setTimeout(() => { noBtn.textContent = old; }, 1200);
+      }
+    });
+
+    // Mobile: same behavior on tap
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      noBtn.dispatchEvent(new MouseEvent("mousedown", { bubbles:true, cancelable:true }));
+    }, { passive:false });
+
+    // Optional: put "No" in a safe spot once so it never starts off-screen
+    window.addEventListener("load", () => skipNoButton());
+
+    // ---------- Photo upload + save ----------
+    function setupPhoto(fileInputId, imgId, placeholderId, clearBtnId, nameId, storageKey){
+      const fileInput = document.getElementById(fileInputId);
+      const img = document.getElementById(imgId);
+      const ph = document.getElementById(placeholderId);
+      const clearBtn = document.getElementById(clearBtnId);
+      const nameEl = document.getElementById(nameId);
+
+      const saved = localStorage.getItem(storageKey);
+      if(saved){
+        img.src = saved;
+        img.style.display = "block";
+        ph.style.display = "none";
+        nameEl.textContent = "Saved photo ✅";
+      }
+
+      fileInput.addEventListener("change", () => {
+        const file = fileInput.files && fileInput.files[0];
+        if(!file) return;
+        nameEl.textContent = file.name;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = reader.result;
+          img.src = dataUrl;
+          img.style.display = "block";
+          ph.style.display = "none";
+          localStorage.setItem(storageKey, dataUrl);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      clearBtn.addEventListener("click", () => {
+        img.src = "";
+        img.style.display = "none";
+        ph.style.display = "block";
+        fileInput.value = "";
+        nameEl.textContent = "No file chosen";
+        localStorage.removeItem(storageKey);
+      });
+    }
+
+    setupPhoto("file1","img1","ph1","clear1","name1","valentine_photo_1");
+    setupPhoto("file2","img2","ph2","clear2","name2","valentine_photo_2");
+
+    // ---------- Plans ----------
+    const addPlanBtn = document.getElementById("addPlanBtn");
+    const clearPlansBtn = document.getElementById("clearPlansBtn");
+    const planList = document.getElementById("planList");
+
+    function loadPlans(){
+      try{ return JSON.parse(localStorage.getItem("valentine_plans") || "[]"); }
+      catch{ return []; }
+    }
+    function savePlans(plans){
+      localStorage.setItem("valentine_plans", JSON.stringify(plans));
+    }
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+    function toFriendlyTime(timeRaw){
+      if(!timeRaw) return "TBD";
+      const parts = timeRaw.split(":");
+      if(parts.length !== 2) return timeRaw;
+      const hh = Number(parts[0]), mm = Number(parts[1]);
+      if(!Number.isFinite(hh) || !Number.isFinite(mm)) return timeRaw;
+      const ampm = hh >= 12 ? "PM" : "AM";
+      const h12 = ((hh + 11) % 12) + 1;
+      return `${h12}:${String(mm).padStart(2,"0")} ${ampm}`;
+    }
+
+    function renderPlans(){
+      const plans = loadPlans();
+      planList.innerHTML = "";
+      if(plans.length === 0){
+        planList.innerHTML = `<div class="small" style="margin-top:6px;">No extra plans yet 🌸</div>`;
+        return;
+      }
+
+      plans.forEach((p, idx) => {
+        const div = document.createElement("div");
+        div.className = "planItem";
+        div.innerHTML = `
+          <div class="planLeft">
+            <div class="planPlace">${escapeHtml(p.place || "Surprise Date 💕")}</div>
+            <div class="planMeta">🕒 ${escapeHtml(p.time || "TBD")}</div>
+            ${p.note ? `<div class="planNote">💌 ${escapeHtml(p.note)}</div>` : ``}
+          </div>
+          <button class="del" data-i="${idx}" type="button">Delete</button>
+        `;
+        planList.appendChild(div);
+      });
+
+      planList.querySelectorAll(".del").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.getAttribute("data-i"));
+          const plans = loadPlans();
+          plans.splice(i,1);
+          savePlans(plans);
+          renderPlans();
+        });
+      });
+    }
+
+    (function seedDefaultPlan(){
+      const plans = loadPlans();
+      const already = plans.some(p => (p.place||"").toLowerCase().includes("tao") && (p.time||"").includes("11:30"));
+      if(!already){
+        plans.unshift({ place: "TAO (New York)", time: "11:30 PM", note: "Dinner date 💖" });
+        savePlans(plans);
+      }
+      renderPlans();
+    })();
+
+    addPlanBtn.addEventListener("click", () => {
+      const place = placeEl.value.trim();
+      const timeRaw = timeEl.value.trim();
+      const note = noteEl.value.trim();
+
+      if(!place && !timeRaw && !note) return;
+
+      const plans = loadPlans();
+      plans.push({
+        place: place || "Surprise Date 💕",
+        time: toFriendlyTime(timeRaw),
+        note
+      });
+      savePlans(plans);
+      renderPlans();
+    });
+
+    clearPlansBtn.addEventListener("click", () => {
+      localStorage.removeItem("valentine_plans");
+      renderPlans();
+    });
+  </script>
+</body>
+</html>
