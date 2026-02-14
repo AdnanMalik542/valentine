@@ -52,7 +52,7 @@
       box-shadow:var(--shadow);
       padding:22px;
       position:relative;
-      overflow:visible;
+      overflow:visible; /* so the No button can float around */
     }
 
     .top{
@@ -174,7 +174,7 @@
       max-width: 100%;
     }
 
-    /* Photos */
+    /* Photos (NO upload features anymore) */
     .photos{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -214,60 +214,7 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      display:none;
-    }
-    .placeholder{
-      padding:10px;
-      color: rgba(0,0,0,.55);
-      font-weight:800;
-      font-size:13px;
-    }
-
-    /* Cute file input */
-    .fileRow{
-      display:flex;
-      gap:10px;
-      justify-content:center;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .fileInput{ display:none; }
-    .chooseBtn{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 12px;
-      border-radius:14px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color:white;
-      font-weight:900;
-      cursor:pointer;
-      border: 1px solid rgba(255,255,255,.35);
-      box-shadow: 0 10px 20px rgba(0,0,0,.10);
-      user-select:none;
-      font-size:13px;
-    }
-    .chooseBtn:active{ transform: translateY(1px); }
-    .fileName{
-      font-size:12px;
-      font-weight:800;
-      color: rgba(0,0,0,.65);
-      max-width: 220px;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .miniBtn{
-      padding:10px 12px;
-      font-size:13px;
-      border-radius:14px;
-      box-shadow:none;
-      border:1px solid rgba(0,0,0,.07);
-      background:white;
-      cursor:pointer;
-      font-weight:900;
-      color: rgba(0,0,0,.7);
+      display:block; /* always show */
     }
 
     /* Plans */
@@ -390,29 +337,25 @@
           YAYYY!! 💕✨ See you at TAO in New York at 11:30 PM 🥰
         </div>
 
+        <!-- PHOTOS: static from your repo (no upload UI) -->
         <div class="photos">
-          <!-- Photo 1 -->
-          <<div class="photos">
-  <!-- Photo 1 -->
-  <div class="photoBox">
-    <h3>Our Photo #1 📸</h3>
-    <div class="preview">
-      <img src="Images/ADNANandHridita1.jpg" style="display:block; width:100%; height:100%; object-fit:cover;">
-    </div>
-  </div>
+          <div class="photoBox">
+            <h3>Our Photo #1 📸</h3>
+            <div class="preview">
+              <img src="Images/ADNANandHridita1.jpg" alt="Adnan and Hriditia photo 1">
+            </div>
+          </div>
 
-  <!-- Photo 2 -->
-  <div class="photoBox">
-    <h3>Our Photo #2 🌷</h3>
-    <div class="preview">
-      <img src="Images/ADNANandHridita2.jpg" style="display:block; width:100%; height:100%; object-fit:cover;">
-    </div>
-  </div>
-</div>
-
+          <div class="photoBox">
+            <h3>Our Photo #2 🌷</h3>
+            <div class="preview">
+              <img src="Images/ADNANandHridita2.jpg" alt="Adnan and Hriditia photo 2">
+            </div>
+          </div>
+        </div>
 
         <div class="small">
-          Photos are saved only on this device/browser (not uploaded anywhere).
+          (These photos are loaded from your GitHub repo.)
         </div>
       </div>
 
@@ -451,7 +394,6 @@
     const placeEl = document.getElementById("place");
     const timeEl  = document.getElementById("time");
     const noteEl  = document.getElementById("note");
-    
 
     // ---------- Prefill inputs ----------
     if (!placeEl.value) placeEl.value = "TAO (New York)";
@@ -520,7 +462,6 @@
       noBtn.style.left = clamp(x, minX, maxX) + "px";
       noBtn.style.top  = clamp(y, minY, maxY) + "px";
       noBtn.style.zIndex = "9999";
-
     }
 
     function showToast(msg){
@@ -530,7 +471,6 @@
       showToast._t = setTimeout(() => toast.style.display = "none", 1600);
     }
 
-    // THIS is the key:
     // move right BEFORE click happens (mousedown), so it never gets clicked.
     noBtn.addEventListener("mousedown", (e) => {
       e.preventDefault();
@@ -540,25 +480,21 @@
       const line = funnyLines[Math.min(noAttempts - 1, funnyLines.length - 1)];
       showToast(line);
 
-      // After a few attempts, get extra playful
       if(noAttempts === 3) hintText.textContent = "It’s okay… just press YES 😌💗";
       if(noAttempts === 6) hintText.textContent = "At this point… we both know the answer 😭💖";
       if(noAttempts === 9) hintText.textContent = "Fine… I’ll stop running (I won’t) 😏";
 
-      // On attempt 7, shrink a little (still visible)
       if(noAttempts >= 7 && noAttempts <= 10){
         const scale = Math.max(0.75, 1 - (noAttempts - 6) * 0.07);
         noBtn.style.transform = `scale(${scale})`;
       }
 
-      // On attempt 10, rename it as a joke (still a "No" button)
       if(noAttempts === 10){
         noBtn.textContent = "Still No 🙈 (why?)";
       }
 
       skipNoButton();
 
-      // On attempt 12, it temporarily turns into "Yes" for fun… then back
       if(noAttempts === 12){
         const old = noBtn.textContent;
         noBtn.textContent = "YES 😳";
@@ -573,53 +509,8 @@
       noBtn.dispatchEvent(new MouseEvent("mousedown", { bubbles:true, cancelable:true }));
     }, { passive:false });
 
-    // Optional: put "No" in a safe spot once so it never starts off-screen
+    // start "No" in a safe spot once
     window.addEventListener("load", () => skipNoButton());
-
-    // ---------- Photo upload + save ----------
-    function setupPhoto(fileInputId, imgId, placeholderId, clearBtnId, nameId, storageKey){
-      const fileInput = document.getElementById(fileInputId);
-      const img = document.getElementById(imgId);
-      const ph = document.getElementById(placeholderId);
-      const clearBtn = document.getElementById(clearBtnId);
-      const nameEl = document.getElementById(nameId);
-
-      const saved = localStorage.getItem(storageKey);
-      if(saved){
-        img.src = saved;
-        img.style.display = "block";
-        ph.style.display = "none";
-        nameEl.textContent = "Saved photo ✅";
-      }
-
-      fileInput.addEventListener("change", () => {
-        const file = fileInput.files && fileInput.files[0];
-        if(!file) return;
-        nameEl.textContent = file.name;
-
-        const reader = new FileReader();
-        reader.onload = () => {
-          const dataUrl = reader.result;
-          img.src = dataUrl;
-          img.style.display = "block";
-          ph.style.display = "none";
-          localStorage.setItem(storageKey, dataUrl);
-        };
-        reader.readAsDataURL(file);
-      });
-
-      clearBtn.addEventListener("click", () => {
-        img.src = "";
-        img.style.display = "none";
-        ph.style.display = "block";
-        fileInput.value = "";
-        nameEl.textContent = "No file chosen";
-        localStorage.removeItem(storageKey);
-      });
-    }
-
-    setupPhoto("file1","img1","ph1","clear1","name1","valentine_photo_1");
-    setupPhoto("file2","img2","ph2","clear2","name2","valentine_photo_2");
 
     // ---------- Plans ----------
     const addPlanBtn = document.getElementById("addPlanBtn");
@@ -719,7 +610,3 @@
   </script>
 </body>
 </html>
-
-
-
-
